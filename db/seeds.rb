@@ -7,4 +7,30 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+AdminUser.find_or_create_by!(email: 'admin@example.com') do |user|
+  user.password = 'password'
+  user.password_confirmation = 'password'
+end if Rails.env.development?
+
+require 'csv'
+csv_file = Rails.root.join('db/products/products.csv')
+
+if File.exist?(csv_file)
+  csv_data = File.read(csv_file)
+  products = CSV.parse(csv_data, headers: true)
+
+  products.each do |product|
+
+    Product.create(
+      name: product['product_sneakers_name'],
+      description: product['product_sneakers_description'],
+      price: product['product_sneakers_price'],
+      product_image: product['product_sneakers_image-src'],
+      product_link: product['product-sneakers-link-href'],
+      product_styleno: product['product_sneakers_style'],
+
+    )
+  end
+else
+  puts "CSV file not found"
+end
