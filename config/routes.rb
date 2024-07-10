@@ -9,9 +9,12 @@ Rails.application.routes.draw do
   resources :customer_addresses
   resources :order_items
   resources :products
-  # config/routes.rb
-  # config/routes.rb
-  resources :categories, path: '', only: [:index, :show], param: :name do
+  resources :products
+  
+  resources :categories, path: 'categories', only: [:index, :show], param: :name do
+    collection do
+      get '', to: 'categories#index', as: 'index'
+    end
     member do
       get ':sub_category_name', to: 'categories#show', as: 'sub_category'
     end

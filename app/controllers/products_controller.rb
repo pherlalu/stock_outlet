@@ -6,5 +6,7 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find(params[:id])
+    @category = @product.categories.find { |cat| cat.sub_category_id.nil? }
+    @sub_category = @product.categories.find { |cat| cat.sub_category_id.present? }
   end
 end

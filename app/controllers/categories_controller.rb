@@ -27,6 +27,6 @@ class CategoriesController < ApplicationController
   end
 
   def find_sub_category
-    @sub_category = @category.sub_categories.find_by(name: params[:sub_category_name])
+    @sub_category = @category.sub_categories.find_by(name: params[:sub_category_name]) if @category
   end
 end
