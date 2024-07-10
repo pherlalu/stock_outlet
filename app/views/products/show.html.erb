@@ -1,8 +1,6 @@
 <div class="bg-white">
   <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
      <%= render partial: 'shared/breadcrumb' %>
-
-
     <div class="grid grid-cols-1 gap-y-8 gap-x-8 lg:grid-cols-2 lg:gap-x-16">
       <!-- Product info -->
       <div class="flex flex-col justify-between px-4 sm:px-6 lg:px-8">
@@ -45,31 +43,33 @@
             <p class="ml-2 mt-6 text-sm text-gray-500">In stock and ready to ship</p>
           </div>
 
-          <!-- Size options -->
-          <div class="mt-10">
-            <h3 class="text-sm font-medium text-gray-900">Size</h3>
-            <fieldset class="mt-4">
-              <div class="flex space-x-4">
-                <label class="block">
-                  <input type="radio" name="size-choice" value="18L" class="sr-only" checked>
-                  <div class="px-4 py-2 border border-indigo-500 rounded-lg cursor-pointer">
-                    <p class="text-base font-medium text-gray-900">18L</p>
-                    <p class="text-sm text-gray-500">Perfect for a reasonable amount of snacks.</p>
-                  </div>
-                </label>
-                <label class="block">
-                  <input type="radio" name="size-choice" value="20L" class="sr-only">
-                  <div class="px-4 py-2 border border-gray-300 rounded-lg cursor-pointer">
-                    <p class="text-base font-medium text-gray-900">20L</p>
-                    <p class="text-sm text-gray-500">Enough room for a serious amount of snacks.</p>
-                  </div>
-                </label>
-              </div>
-            </fieldset>
-            <a href="#" class="mt-3 block text-sm font-medium text-indigo-600 hover:text-indigo-500">What size should I buy?</a>
-          </div>
+          <form class="mt-10">
+            <!-- Colors -->
+            <div>
+              <h3 class="text-sm font-medium text-gray-900">Color</h3>
 
-          <button type="submit" class="mt-10 w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add to bag</button>
+              <fieldset aria-label="Choose a color" class="mt-4">
+                <div class="flex items-center space-x-3">
+                  <!-- Active and Checked: "ring ring-offset-1" -->
+                  <label aria-label="White" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-400 focus:outline-none">
+                    <input type="radio" name="color-choice" value="White" class="sr-only">
+                    <span aria-hidden="true" class="h-8 w-8 rounded-full border border-black border-opacity-10 bg-white"></span>
+                  </label>
+                  <!-- Active and Checked: "ring ring-offset-1" -->
+                  <label aria-label="Gray" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-400 focus:outline-none">
+                    <input type="radio" name="color-choice" value="Gray" class="sr-only">
+                    <span aria-hidden="true" class="h-8 w-8 rounded-full border border-black border-opacity-10 bg-gray-200"></span>
+                  </label>
+                  <!-- Active and Checked: "ring ring-offset-1" -->
+                  <label aria-label="Black" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-900 focus:outline-none">
+                    <input type="radio" name="color-choice" value="Black" class="sr-only">
+                    <span aria-hidden="true" class="h-8 w-8 rounded-full border border-black border-opacity-10 bg-gray-900"></span>
+                  </label>
+                </div>
+              </fieldset>
+            </div>
+            <button type="submit" class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add to bag</button>
+          </form>
 
           <div class="mt-4">
             <a href="#" class="flex items-center text-sm font-medium text-gray-900">
@@ -79,11 +79,8 @@
               Lifetime Guarantee
             </a>
           </div>
-
-          
         </div>
       </div>
-
       <!-- Product image -->
       <div class="flex justify-center items-center px-4 sm:px-6 lg:px-8">
         <img src="<%= @product.product_image %>" alt="Model wearing light green backpack with black canvas straps and front zipper pouch." class="w-full max-w-2xl">

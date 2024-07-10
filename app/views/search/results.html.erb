@@ -1,0 +1,28 @@
+<div class="bg-white">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="py-16 sm:py-24 lg:py-32">
+       <h2 class="col-span-full text-3xl font-bold tracking-tight text-gray-900 mb-10">
+        Browse <%= @products.count %> results for "<i><%= params[:search] %></i>"
+      </h2>
+      <% if @products.present? %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
+          <% @products.each do |product| %>
+            <a href="<%= product_path(product) %>" class="block">
+              <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+                <img src="<%= product.product_image %>" alt="image" class="h-full w-full object-cover object-center lg:h-auto lg:w-auto">
+              </div>
+              <h3 class="mt-4 text-lg  text-gray-700">
+                <%= product.name %>
+              </h3>
+              <p class="mt-1 text-lg font-bold  text-gray-900"><%= number_to_currency(product.price) %></p>
+            </a>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="mt-6 text-lg text-gray-700">No products found</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+

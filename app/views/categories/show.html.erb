@@ -19,24 +19,24 @@
       </div>
 
       <!-- Products Section -->
-<div class="<%= @category.sub_categories.any? ? 'lg:col-span-3' : 'lg:col-span-4' %> grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-  <h2 class="col-span-full text-2xl font-bold text-gray-900">Products</h2>
-  <% if @products.present? %>
-    <% @products.each do |product| %>
-      <a href="<%= product_path(product) %>" class="block">
-        <div class="aspect-h-1 aspect-w-1 w-auto overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
-          <img src="<%= product.product_image %>" alt="image" class="h-auto w-auto object-cover object-center lg:h-auto lg:w-auto">
-        </div>
-        <h3 class="mt-4 text-sm text-gray-700">
-          <%= product.name %>
-        </h3>
-        <p class="mt-1 text-lg font-medium text-gray-900">$<%= product.price %></p>
-      </a>
-    <% end %>
-  <% else %>
-    <p>No products available</p>
-  <% end %>
-</div>
+      <div class="<%= @category.sub_categories.any? ? 'lg:col-span-3' : 'lg:col-span-4' %> grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <h2 class="col-span-full text-2xl font-bold text-gray-900">Products</h2>
+        <% if @products.present? %>
+          <% @products.each do |product| %>
+            <a href="<%= product_path(product) %>" class="block">
+              <div class="aspect-h-1 aspect-w-1 w-auto overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+                <img src="<%= product.product_image %>" alt="image" class="h-auto w-auto object-cover object-center lg:h-auto lg:w-auto">
+              </div>
+              <h3 class="mt-4 text-sm text-gray-700">
+                <%= product.name %>
+              </h3>
+              <p class="mt-1 text-lg font-medium text-gray-900">$<%= product.price %></p>
+            </a>
+          <% end %>
+        <% else %>
+          <p>No products available</p>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

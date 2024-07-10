@@ -9,6 +9,10 @@ class Category < ApplicationRecord
     name
   end
 
+  def subtree_ids
+    sub_category_ids + sub_categories.flat_map(&:subtree_ids)
+  end
+
   validates :name, presence: true
  
 end

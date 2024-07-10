@@ -3,7 +3,7 @@
     <% if @category %>
       <li>
         <div class="flex items-center">
-          <a href="<%= category_path(@category) %>" class="text-sm font-medium text-gray-900"><%= @category.name %></a>
+          <a href="<%= category_path(@category.name) %>" class="text-sm font-medium text-gray-900"><%= @category.name %></a>
           <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" aria-hidden="true" class="h-5 w-4 text-gray-300 mx-2">
             <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z"></path>
           </svg>
@@ -14,7 +14,7 @@
     <% if @sub_category %>
       <li>
         <div class="flex items-center">
-          <a href="<%= sub_category_category_path(@category, @sub_category.name) %>" class="text-sm font-medium text-gray-900"><%= @sub_category.name %></a>
+          <a href="<%= category_path(@category.name, sub_category_name: @sub_category.name) %>" class="text-sm font-medium text-gray-900"><%= @sub_category.name %></a>
           <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" aria-hidden="true" class="h-5 w-4 text-gray-300 mx-2">
             <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z"></path>
           </svg>
