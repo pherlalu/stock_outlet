@@ -13,7 +13,7 @@ AdminUser.find_or_create_by!(email: 'admin@example.com') do |user|
 end if Rails.env.development?
 
 require 'csv'
-csv_file = Rails.root.join('db/products/products.csv')
+csv_file = Rails.root.join('db/products/master_product_list.csv')
 
 if File.exist?(csv_file)
   csv_data = File.read(csv_file)
@@ -22,12 +22,12 @@ if File.exist?(csv_file)
   products.each do |product|
 
     Product.create(
-      name: product['product_sneakers_name'],
-      description: product['product_sneakers_description'],
-      price: product['product_sneakers_price'],
-      product_image: product['product_sneakers_image-src'],
-      product_link: product['product-sneakers-link-href'],
-      product_styleno: product['product_sneakers_style'],
+      name: product['product_name'],
+      description: product['product_description'],
+      price: product['product_price'],
+      product_image: product['product_image-src'],
+      product_link: product['product-href'],
+      product_styleno: product['product_color'],
 
     )
   end

@@ -1,4 +1,24 @@
-<div>
-  <h1 class="font-bold text-4xl">Products#index</h1>
-  <p>Find me in app/views/products/index.html.erb</p>
+
+<div class="bg-white">
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 class="sr-only">Products</h2>
+
+    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+            <% @products.each do |product| %>
+      <a href="<%= product_path(product) %>" class="group">
+        <div class="aspect-h-1 aspect-w-1 w-auto overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+          <img src="<%= product.product_image %>" alt="image" class="h-auto w-auto object-cover object-center lg:h-auto lg:w-auto">
+        </div>
+        <h3 class="mt-4 text-sm text-gray-700"><%= product.name %></h3>
+        <p class="mt-1 text-lg font-medium text-gray-900">CA$<%= product.price %></p>
+      </a>
+
+      <% end %>
+
+      <!-- More products... -->
+    </div>
+    <div class="mt-8">
+      <%= paginate @products %>
+    </div>
+  </div>
 </div>
