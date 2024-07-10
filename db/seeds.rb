@@ -12,6 +12,10 @@ AdminUser.find_or_create_by!(email: 'admin@example.com') do |user|
   user.password_confirmation = 'password'
 end if Rails.env.development?
 
+Product.destroy_all
+ProductCategory.destroy_all
+Category.destroy_all
+
 require 'csv'
 csv_file = Rails.root.join('db/products/master_product_list.csv')
 
@@ -20,16 +24,27 @@ if File.exist?(csv_file)
   products = CSV.parse(csv_data, headers: true)
 
   products.each do |product|
+    category_name = product['category']
+    sub_category_name = product['sub_category']
 
-    Product.create(
+    # Find or create main category
+    category = Category.find_or_create_by(name: category_name)
+
+    # Find or create sub-category and associate with main category
+    sub_category = Category.find_or_create_by(name: sub_category_name, parent_category: category)
+
+    new_product = Product.create(
       name: product['product_name'],
       description: product['product_description'],
       price: product['product_price'],
       product_image: product['product_image-src'],
       product_link: product['product-href'],
-      product_styleno: product['product_color'],
-
+      product_styleno: product['product_color']
     )
+
+    # Create associations with both category and sub-category
+    ProductCategory.create(product: new_product, category: category)
+    ProductCategory.create(product: new_product, category: sub_category)
   end
 else
   puts "CSV file not found"

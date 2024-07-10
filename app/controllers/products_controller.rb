@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   def index
     @products = Product.order(:name).page(params[:page]).per(12)
+    @main_categories = Category.where(sub_category_id: nil)
   end
 
   def show

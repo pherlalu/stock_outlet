@@ -9,7 +9,14 @@ Rails.application.routes.draw do
   resources :customer_addresses
   resources :order_items
   resources :products
-  resources :categories
+  # config/routes.rb
+  # config/routes.rb
+  resources :categories, path: '', only: [:index, :show], param: :name do
+    member do
+      get ':sub_category_name', to: 'categories#show', as: 'sub_category'
+    end
+  end
+
   resources :invoices
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

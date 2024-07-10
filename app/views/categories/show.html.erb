@@ -1,4 +1,42 @@
-<div>
-  <h1 class="font-bold text-4xl">Categories#show</h1>
-  <p>Find me in app/views/categories/show.html.erb</p>
+
+<div class="bg-white">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 py-16 sm:py-24 lg:py-32">
+      <!-- Subcategories Section -->
+      <div class="lg:col-span-1">
+        <form class="md dai">
+          <h3 class="text-lg font-bold text-gray-900"><%= @category.name %> Brands</h3>
+          <ul role="list" class="space-y-4">
+            <% @category.sub_categories.each do |sub_category| %>
+              <li>
+                <a href="<%= sub_category_category_path(@category.name, sub_category.name) %>" class="text-sm text-gray-600 hover:text-gray-900">
+                  <%= sub_category.name %>
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </form>
+      </div>
+
+      <!-- Products Section -->
+      <div class="<%= @category.sub_categories.any? ? 'lg:col-span-3' : 'lg:col-span-4' %> grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <h2 class="col-span-full text-2xl font-bold text-gray-900">Products</h2>
+        <% if @products.present? %>
+          <% @products.each do |product| %>
+            <a href="#" class="block">
+              <div class="aspect-h-1 aspect-w-1 w-auto overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+                <img src="<%= product.product_image %>" alt="image" class="h-auto w-auto object-cover object-center lg:h-auto lg:w-auto">
+              </div>
+              <h3 class="mt-4 text-sm text-gray-700">
+                <%= product.name %>
+              </h3>
+              <p class="mt-1 text-lg font-medium text-gray-900">$<%= product.price %></p>
+            </a>
+          <% end %>
+        <% else %>
+          <p>No products available</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
