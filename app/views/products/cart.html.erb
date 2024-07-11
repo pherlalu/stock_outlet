@@ -1,0 +1,61 @@
+<div class="bg-white">
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900">Shopping Cart</h1>
+    <section aria-labelledby="cart-heading">
+      <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
+      <ul role="list" class="divide-y divide-gray-200">
+        <% @cart_items.each do |item| %>
+          <li class="flex py-6">
+            <div class="h-24 w-24 flex-shrink-0 overflow-hidden ">
+              <img src="<%= item[:product].product_image %>" alt="<%= item[:product].name %>" class="h-auto w-full object-cover object-center">
+            </div>
+            <div class="ml-4 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between text-base font-medium text-gray-900">
+                  <h3>
+                    <%= link_to item[:product].name, product_path(item[:product]), class: 'font-bold text-indigo-600 hover:text-indigo-500' %>
+                  </h3>
+                  <p class="ml-4"><%= number_to_currency(item[:product].price || 0) %></p>
+                </div>
+              </div>
+              <div class="flex-1 flex items-end justify-between text-sm">
+                <div class="flex items-center">
+                  <%= form_with url: update_cart_product_path(item[:product].id), method: :patch, local: true do |f| %>
+                    <label for="quantity" class="mr-2 text-sm text-gray-600">Quantity:</label>
+                    <%= f.number_field :quantity, value: item[:quantity], min: 1, class: 'w-14 border-gray-200 rounded-md' %>
+                    <%= f.submit 'Update', class: 'ml-2 bg-indigo-600 text-white px-2 py-1 rounded-md' %>
+                  <% end %>
+                </div>
+                <div class="flex">
+                  <%= button_to 'Remove', remove_from_cart_product_path(item[:product].id), method: :delete, class: 'font-medium text-indigo-600 hover:text-indigo-500 ml-4', onclick: "return confirm('Are you sure you want to remove this item?');" %>
+                </div>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+
+    <section aria-labelledby="summary-heading" class="mt-10" id="order_summary">
+      <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
+      <div class="mt-4">
+        <dl class="space-y-4">
+          <div class="flex items-center justify-between">
+            <dt class="text-sm text-gray-600">Subtotal</dt>
+            <dd class="text-sm font-medium text-gray-900"><%= number_to_currency(@cart_items.sum { |item| (item[:product].price || 0) * item[:quantity] }) %></dd>
+          </div>
+        </dl>
+        <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes will be calculated at checkout.</p>
+      </div>
+      <div class="mt-6">
+        <%= button_to 'Checkout', checkout_path, method: :post, class: 'w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700' %>
+      </div>
+      <div class="mt-6 flex justify-center text-sm text-gray-500">
+        <p>
+          or
+          <%= link_to 'Continue Shopping', root_path, class: 'font-medium text-indigo-600 hover:text-indigo-500' %>
+        </p>
+      </div>
+    </section>
+  </div>
+</div>

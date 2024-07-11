@@ -1,4 +1,7 @@
 class ProductsController < ApplicationController
+  before_action :initialize_session
+  before_action :load_cart
+
   def index
     @on_sale_products = Product.on_sale.order(:name).limit(12)
     @new_products = Product.new_products.order(:name).limit(12)
@@ -20,5 +23,59 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
     @category = @product.categories.find { |cat| cat.sub_category_id.nil? }
     @sub_category = @product.categories.find { |cat| cat.sub_category_id.present? }
+  end
+
+  def add_to_cart
+    id = params[:id].to_i
+    quantity = params[:quantity].to_i
+    session[:cart][id] ||= 0
+    session[:cart][id] += quantity
+    redirect_to cart_path
+  end
+
+  def remove_from_cart
+    id = params[:id].to_i
+    Rails.logger.debug "Removing item with ID #{id} from cart"
+    session[:cart].delete(id)
+    Rails.logger.debug "Cart after removal: #{session[:cart]}"
+    redirect_to cart_path
+  end
+
+  def update_cart
+    id = params[:id].to_i
+    quantity = params[:quantity].to_i
+    if quantity > 0
+      session[:cart][id] = quantity
+    else
+      session[:cart].delete(id)
+    end
+    redirect_to cart_path
+  end
+
+  def cart
+    @cart_items = load_cart_items
+  end
+
+  private
+
+  def initialize_session
+    session[:visit_count] ||= 0
+    session[:cart] ||= {}
+  end
+
+  def load_cart
+    @cart = session[:cart]
+  end
+
+  def load_cart_items
+    session[:cart].map do |id, quantity|
+      product = Product.find_by(id: id)
+      if product
+        { product: product, quantity: quantity }
+      else
+        session[:cart].delete(id)
+        nil
+      end
+    end.compact
   end
 end

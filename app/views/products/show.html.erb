@@ -1,12 +1,12 @@
 <div class="bg-white">
   <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-     <%= render partial: 'shared/breadcrumb' %>
+    <%= render partial: 'shared/breadcrumb' %>
     <div class="grid grid-cols-1 gap-y-8 gap-x-8 lg:grid-cols-2 lg:gap-x-16">
       <!-- Product info -->
       <div class="flex flex-col justify-between px-4 sm:px-6 lg:px-8">
-        <div class="lg:border-r lg:border-gray-200 lg:pr-4">
-          <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"><%= @product.name %></h1>
-          <p class="text-2xl tracking-tight text-gray-900"><%= number_to_currency(@product.price) %></p>
+        <div class="lg:border-r lg:border-gray-200 lg:pr-12">
+          <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl mt-6"><%= @product.name %></h1>
+          <p class="text-2xl tracking-tight text-gray-900 mt-6"><%= number_to_currency(@product.price) %></p>
           <div class="mt-4">
             <div class="flex items-center">
               <div class="flex items-center">
@@ -30,47 +30,25 @@
               <a href="#" class="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">1624 reviews</a>
             </div>
           </div>
-
           <!-- Product description -->
           <div class="mt-6">
             <p class="text-base text-gray-900"><%= @product.description %></p>
           </div>
-
-          <div class="flex items-center">
+          <div class="flex items-center mt-6">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-6 w-6 text-green-500">
               <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"></path>
             </svg>
-            <p class="ml-2 mt-6 text-sm text-gray-500">In stock and ready to ship</p>
+            <p class="ml-2 text-sm text-gray-500">In stock and ready to ship</p>
           </div>
-
-          <form class="mt-10">
-            <!-- Colors -->
-            <div>
-              <h3 class="text-sm font-medium text-gray-900">Color</h3>
-
-              <fieldset aria-label="Choose a color" class="mt-4">
-                <div class="flex items-center space-x-3">
-                  <!-- Active and Checked: "ring ring-offset-1" -->
-                  <label aria-label="White" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-400 focus:outline-none">
-                    <input type="radio" name="color-choice" value="White" class="sr-only">
-                    <span aria-hidden="true" class="h-8 w-8 rounded-full border border-black border-opacity-10 bg-white"></span>
-                  </label>
-                  <!-- Active and Checked: "ring ring-offset-1" -->
-                  <label aria-label="Gray" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-400 focus:outline-none">
-                    <input type="radio" name="color-choice" value="Gray" class="sr-only">
-                    <span aria-hidden="true" class="h-8 w-8 rounded-full border border-black border-opacity-10 bg-gray-200"></span>
-                  </label>
-                  <!-- Active and Checked: "ring ring-offset-1" -->
-                  <label aria-label="Black" class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-900 focus:outline-none">
-                    <input type="radio" name="color-choice" value="Black" class="sr-only">
-                    <span aria-hidden="true" class="h-8 w-8 rounded-full border border-black border-opacity-10 bg-gray-900"></span>
-                  </label>
-                </div>
-              </fieldset>
-            </div>
-            <button type="submit" class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add to bag</button>
-          </form>
-
+          <div class="mt-10">
+            <%= form_with url: add_to_cart_product_path(@product), method: :post, local: true do %>
+              <div class="flex items-center mb-4">
+                <label for="quantity" class="mr-2 text-sm text-gray-600">Quantity:</label>
+                <%= number_field_tag :quantity, 1, min: 1, class: 'w-16 border-gray-300 rounded-md' %>
+              </div>
+              <%= submit_tag 'Add to cart', class: 'mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2' %>
+            <% end %>
+          </div>
           <div class="mt-4">
             <a href="#" class="flex items-center text-sm font-medium text-gray-900">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-5 w-5 text-gray-500 mr-2">
