@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   resources :customer_addresses
   resources :order_items
   resources :products
-  
   resources :categories, path: 'categories', only: [:index, :show], param: :name do
     collection do
       get '', to: 'categories#index', as: 'index'
@@ -19,7 +18,6 @@ Rails.application.routes.draw do
       get ':sub_category_name', to: 'categories#show', as: 'sub_category'
     end
   end
-
   resources :invoices
   get 'about', to: 'pages#about'  
   get '404', to: 'pages#404'

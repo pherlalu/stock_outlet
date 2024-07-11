@@ -1,24 +1,53 @@
-
 <div class="bg-white">
   <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-    <h2 class="sr-only">Products</h2>
-
-    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-      <% @products.each do |product| %>
-      <a href="<%= product_path(product) %>" class="group">
-        <div class="aspect-h-1 aspect-w-1 w-auto overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
-          <img src="<%= product.product_image %>" alt="image" class="h-auto w-auto object-cover object-center lg:h-auto lg:w-auto">
+    <h1 class="text-2xl font-bold">Recommended For You</h1>
+    <nav aria-label="Tabs" >
+      <div class="flex space-x-8">
+        <%= link_to products_path(filter: 'on_sale'), class: "group inline-flex items-center py-4 px-1 border-b-2 text-sm font-medium #{'text-blue-600 border-blue-600' if params[:filter] == 'on_sale' || params[:filter].blank?}" do %>
+          <i class="fas fa-tags mr-2"></i>
+          <span>On Sale</span>
+        <% end %>
+        <%= link_to products_path(filter: 'new'), class: "group inline-flex items-center py-4 px-1 border-b-2 text-sm font-medium #{'text-blue-600 border-blue-600' if params[:filter] == 'new'}" do %>
+          <i class="fas fa-star mr-2"></i>
+          <span>New Products</span>
+        <% end %>
+        <%= link_to products_path(filter: 'recently_updated'), class: "group inline-flex items-center py-4 px-1 border-b-2 text-sm font-medium #{'text-blue-600 border-blue-600' if params[:filter] == 'recently_updated'}" do %>
+          <i class="fas fa-sync-alt mr-2"></i>
+          <span>Recently Updated</span>
+        <% end %>
+      </div>
+    </nav>
+    <% if @filtered_products.present? %>
+      <div class="mt-10">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          <% @filtered_products.each do |product| %>
+            <a href="<%= product_path(product) %>" class="group">
+              <div class="aspect-h-1 aspect-w-1 w-auto overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+                <img src="<%= product.product_image %>" alt="image" class="h-auto w-auto object-cover object-center lg:h-auto lg:w-auto">
+              </div>
+              <h3 class="mt-4 text-sm text-gray-700"><%= product.name %></h3>
+              <p class="mt-1 text-lg font-medium text-gray-900">CA$<%= product.price %></p>
+            </a>
+          <% end %>
         </div>
-        <h3 class="mt-4 text-sm text-gray-700"><%= product.name %></h3>
-        <p class="mt-1 text-lg font-medium text-gray-900">CA$<%= product.price %></p>
-      </a>
-
-      <% end %>
-
-    </div>
-    <div class="mt-8">
-      <%= paginate @products %>
+      </div>
+    <% end %>
+    <div class="mt-10">
+      <h1 class="text-2xl font-bold">Browse Products</h1>
+      <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+        <% @all_products.each do |product| %>
+          <a href="<%= product_path(product) %>" class="group">
+            <div class="aspect-h-1 aspect-w-1 w-auto overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+              <img src="<%= product.product_image %>" alt="image" class="h-auto w-auto object-cover object-center lg:h-auto lg:w-auto">
+            </div>
+            <h3 class="mt-4 text-sm text-gray-700"><%= product.name %></h3>
+            <p class="mt-1 text-lg font-medium text-gray-900">CA$<%= product.price %></p>
+          </a>
+        <% end %>
+      </div>
+      <div class="mt-8">
+        <%= paginate @all_products %>
+      </div>
     </div>
   </div>
 </div>
-
