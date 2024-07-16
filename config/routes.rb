@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
+  get 'pages/show'
+  get 'pages/edit'
+  get 'pages/update'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   root "products#index"
-  get 'pages/about'
   resources :customers
   resources :provinces
   resources :orders
@@ -32,6 +34,9 @@ Rails.application.routes.draw do
   get '404', to: 'pages#404'
   get 'search', to: 'search#index'
   get 'search/results', to: 'search#results', as: 'search_results'
+
+  # Example routes for contact and about
+  get '/pages/:slug', to: 'pages#show', as: 'page'
   
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
