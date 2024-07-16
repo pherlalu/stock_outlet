@@ -5,7 +5,7 @@
     <% end %>
   </div>
   <div class="flex-1 flex justify-center">
-    <form action="<%= search_results_path %>" method="get" class="relative w-2/4 flex" id="search-form">
+    <form action="<%= search_results_path %>" method="get" class="relative w-3/4 flex" id="search-form">
       <div class="relative flex-1">
         <label for="search" class="sr-only">Search</label>
         <div class="relative">
@@ -28,6 +28,12 @@
     </form>
   </div>
   <div class="flex items-center space-x-4">
+    <div class="hidden sm:mr-6 sm:block">
+      <div class="flex">
+        <%= link_to 'Contact', page_path('contact'), class: 'rounded-md px-3 py-2 text-lg font-medium text-gray-300 hover:bg-gray-700 hover:text-white' %>
+        <%= link_to 'About', page_path('about'), class: 'rounded-md px-3 py-2 text-lg font-medium text-gray-300 hover:bg-gray-700 hover:text-white' %>
+      </div>
+    </div>
     <!-- Cart -->
     <div class="ml-4 flow-root lg:ml-6">
       <%= link_to cart_path, class: "group -m-2 flex items-center p-2" do %>
@@ -46,11 +52,6 @@
     </div>
   </div>
 </header>
-
 <p class="flex h-10 items-center justify-center bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30 px-4 text-sm font-semibold text-white sm:px-6 lg:px-8">Get free delivery on orders over $100</p>
-<nav aria-label="Global" class="flex justify-center space-x-4 mt-4">
-  <% @main_categories.each do |category| %>
-    <a href="<%= category_path(category) %>" aria-current="page" class="px-3 py-2 rounded-md text-2xl font-semibold text-gray-800"><%= category.name %></a>
-  <% end %>
-</nav>
+
 
