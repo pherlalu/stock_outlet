@@ -1,9 +1,10 @@
 class ApplicationController < ActionController::Base
-  before_action :set_main_categories
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
-  private
+  protected
 
-  def set_main_categories
-    @main_categories = Category.where(sub_category_id: nil)
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :province_id, customer_address_attributes: [:address]])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:username, :province_id, customer_address_attributes: [:address]])
   end
 end

@@ -27,7 +27,7 @@
                   <% end %>
                 </div>
                 <div class="flex">
-                  <%= button_to 'Remove', remove_from_cart_product_path(item[:product].id), method: :delete, class: 'font-medium text-indigo-600 hover:text-indigo-500 ml-4', onclick: "return confirm('Are you sure you want to remove this item?');" %>
+                  <%= button_to 'Remove', remove_from_cart_product_path(item[:product].id), data: { turbo_method: :delete }, class: 'font-medium text-indigo-600 hover:text-indigo-500 ml-4', onclick: "return confirm('Are you sure you want to remove this item?');" %>
                 </div>
               </div>
             </div>
