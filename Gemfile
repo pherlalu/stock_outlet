@@ -73,3 +73,5 @@ gem "sassc-rails", "~> 2.1"
 gem "tailwindcss-rails", "~> 2.6"
 
 gem 'kaminari'
+
+gem "stripe", "~> 12.2"
