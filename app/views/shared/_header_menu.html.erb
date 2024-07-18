@@ -60,9 +60,6 @@
       <div class="block px-4 py-2 text-sm text-gray-700 bg-gray-100">Welcome, <%= current_customer.email %>!</div>
       <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
       <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-      <% if current_customer.admin? %>
-        <%= link_to 'Admin', admin_root_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
-      <% end %>
       <%= link_to "Sign Out", destroy_customer_session_path, data: { turbo_method: :delete }, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
     <% else %>
       <%= link_to 'Sign Up', new_customer_registration_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
