@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_17_010243) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_18_160943) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -46,14 +46,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_010243) do
     t.index ["sub_category_id"], name: "index_categories_on_sub_category_id"
   end
 
-  create_table "customer_addresses", force: :cascade do |t|
-    t.integer "customer_id", null: false
-    t.string "address"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["customer_id"], name: "index_customer_addresses_on_customer_id"
-  end
-
   create_table "customers", force: :cascade do |t|
     t.string "username"
     t.string "email"
@@ -65,6 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_010243) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.string "address"
     t.index ["email"], name: "index_customers_on_email", unique: true
     t.index ["province_id"], name: "index_customers_on_province_id"
     t.index ["reset_password_token"], name: "index_customers_on_reset_password_token", unique: true
@@ -144,7 +137,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_010243) do
   end
 
   add_foreign_key "categories", "categories", column: "sub_category_id"
-  add_foreign_key "customer_addresses", "customers"
   add_foreign_key "customers", "provinces"
   add_foreign_key "invoices", "orders"
   add_foreign_key "order_items", "orders"

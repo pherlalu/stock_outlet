@@ -1,5 +1,4 @@
 ActiveAdmin.register Customer do
-
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   #
@@ -14,7 +13,7 @@ ActiveAdmin.register Customer do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  permit_params :username, :email, :password, :province_id, customer_address_attributes: [:id, :address, :_destroy]
+  permit_params :username, :email, :password, :province_id, :address, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at
 
   form do |f|
     f.inputs 'Customer Details' do
@@ -22,9 +21,7 @@ ActiveAdmin.register Customer do
       f.input :email
       f.input :password
       f.input :province, as: :select, collection: Province.all.collect { |p| [p.name, p.id] }
-      f.inputs 'Address', for: [:customer_address, f.object.customer_address || CustomerAddress.new] do |a|
-        a.input :address
-      end
+      f.input :address
     end
     f.actions
   end
@@ -35,9 +32,7 @@ ActiveAdmin.register Customer do
     column :username
     column :email
     column :province
-    column :address do |customer|
-      customer.customer_address&.address
-    end
+    column :address
     actions
   end
 
@@ -46,9 +41,7 @@ ActiveAdmin.register Customer do
       row :username
       row :email
       row :province
-      row :address do |customer|
-        customer.customer_address&.address
-      end
+      row :address
       row :created_at
       row :updated_at
     end
@@ -57,7 +50,6 @@ ActiveAdmin.register Customer do
   filter :username
   filter :email
   filter :province
+  filter :address
   filter :created_at
 end
-
-
