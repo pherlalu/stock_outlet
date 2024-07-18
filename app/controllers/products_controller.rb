@@ -35,9 +35,7 @@ class ProductsController < ApplicationController
 
   def remove_from_cart
     id = params[:id].to_i
-    Rails.logger.debug "Removing item with ID #{id} from cart"
     session[:cart].delete(id)
-    Rails.logger.debug "Cart after removal: #{session[:cart]}"
     redirect_to cart_path
   end
 
