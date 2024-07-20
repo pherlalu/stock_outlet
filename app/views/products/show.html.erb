@@ -42,13 +42,7 @@
             <p class="ml-2 text-sm text-gray-500">In stock and ready to ship</p>
           </div>
           <div class="mt-10">
-            <%= form_with url: add_to_cart_product_path(@product), method: :post, local: true do %>
-              <div class="flex items-center mb-4">
-                <label for="quantity" class="mr-2 text-sm text-gray-600">Quantity:</label>
-                <%= number_field_tag :quantity, 1, min: 1, class: 'w-16 border-gray-300 rounded-md' %>
-              </div>
-              <%= submit_tag 'Add to cart', class: 'mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2' %>
-            <% end %>
+            <%= render "add_to_cart",  class: 'mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2', product: @product %>
           </div>
           <div class="mt-4">
             <a href="#" class="flex items-center text-sm font-medium text-gray-900">
