@@ -62,4 +62,10 @@ class CartsController < ApplicationController
   def set_product
     @product = Product.find(params[:product_id])
   end
+  
+  def set_province
+    @province = Province.find(params[:province_id]) if params[:province_id].present?
+  end
 end
+
+

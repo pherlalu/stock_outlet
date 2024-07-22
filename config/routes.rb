@@ -22,12 +22,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :carts, only: [:create, :show, :destroy, :update] do
-    member do
-      get 'checkout'
-      post 'stripe_session'
-      get 'success'
-    end
+  resources :carts, only: [:create, :show, :destroy] do
+    get "checkout", on: :member, to: "carts#checkout"
+    post "stripe_session", on: :member, to: "carts#stripe_session"
+    get "success", on: :member, to: "carts#success"
   end
 
   get 'cart', to: 'carts#show', as: 'current_cart'
