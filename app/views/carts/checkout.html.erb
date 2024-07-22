@@ -1,19 +1,83 @@
-<div class="w-full grid md:grid-cols-2">
-  <div class="w-full flex flex-col items-center md:pt-8">
-    <h1 class="text-5xl font-broken text-indigo-900 text-center"> Your Cart </h1>
-    <p> You have <%= @current_cart.cart_items.count %> products in your cart </p>
-    <div class="mx-auto flex flex-col gap-2"> 
-      <% @current_cart.products.each.with_index do |product, index| %>
-        <div class="flex gap-2 bg-gray-700/75 p-2">
-          <span class="px-2 rounded-full bg-gray-500 text-gray-100"> <%= index + 1 %> </span>
-          <p class="text-indigo-100"> <%= product.name %> </p>
-          <p class="text-green-500"> <%= number_to_currency product.price %> </p>
-        </div>
-      <% end %>
-    </div>
+<div class="w-full grid md:grid-cols-2 gap-8">
+  <div class="w-full bg-white p-6 rounded shadow-md" data-controller="stripe-checkout"
+    data-stripe-checkout-url-value="<%= stripe_session_cart_path(@current_cart.secret_id) %>">
   </div>
 
-  <div data-controller="stripe-checkout" data-stripe-checkout-url-value="<%= stripe_session_cart_path(@current_cart.secret_id) %>"> 
+  <div class="bg-white">
+    <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">Order summary</h1>
+      <section aria-labelledby="cart-heading">
+        <ul role="list" class="divide-y divide-gray-200">
+          <% @current_cart.cart_items.each do |item| %>
+            <li class="flex py-6 items-center">
+              <div class="h-24 w-24 flex-shrink-0 overflow-hidden">
+                <%= image_tag item.product.product_image, alt: item.product.name,
+                  class: "h-auto w-full object-cover object-center" if item.product.product_image.present? %>
+              </div>
+              <div class="ml-4 flex-1 flex flex-col">
+                <div class="flex justify-between">
+                  <div>
+                    <h3 class="text-base font-medium text-gray-900">
+                      <%= item.product.name %>
+                    </h3>
+                  </div>
+                  <p class="ml-4 text-base font-medium text-gray-900">
+                    <%= number_to_currency(item.product.price) %>
+                  </p>
+                </div>
+                <div class="flex-1 flex items-end justify-between text-sm">
+                  <p class="text-gray-500">Qty <%= item.quantity %>
+                  </p>
+                </div>
+              </div>
+            </li>
+            <% end %>
+        </ul>
+      </section>
 
+      <section aria-labelledby="summary-heading" class="mt-10">
+        <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
+        <div class="mt-4 bg-gray-100 p-4 rounded-lg">
+          <dl class="space-y-4">
+            <div class="flex items-center justify-between">
+              <dt class="text-sm text-gray-600">Subtotal</dt>
+              <dd class="text-sm font-medium text-gray-900">
+                <%= number_to_currency(@tax_details[:subtotal]) %>
+              </dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt class="text-sm text-gray-600">GST</dt>
+              <dd class="text-sm font-medium text-gray-900">
+                <%= number_to_currency(@tax_details[:gst]) %>
+              </dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt class="text-sm text-gray-600">PST</dt>
+              <dd class="text-sm font-medium text-gray-900">
+                <%= number_to_currency(@tax_details[:pst]) %>
+              </dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt class="text-sm text-gray-600">HST</dt>
+              <dd class="text-sm font-medium text-gray-900">
+                <%= number_to_currency(@tax_details[:hst]) %>
+              </dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt class="text-sm text-gray-600">QST</dt>
+              <dd class="text-sm font-medium text-gray-900">
+                <%= number_to_currency(@tax_details[:qst]) %>
+              </dd>
+            </div>
+            <div class="flex items-center justify-between border-t border-gray-200 pt-4">
+              <dt class="text-base font-medium text-gray-900">Order total</dt>
+              <dd class="text-base font-medium text-gray-900">
+                <%= number_to_currency(@tax_details[:total]) %>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+    </div>
   </div>
 </div>

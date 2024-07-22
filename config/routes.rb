@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :carts, only: [:create, :show, :destroy] do
+  resources :carts, only: [:create, :show, :destroy, :update] do
     get "checkout", on: :member, to: "carts#checkout"
     post "stripe_session", on: :member, to: "carts#stripe_session"
     get "success", on: :member, to: "carts#success"

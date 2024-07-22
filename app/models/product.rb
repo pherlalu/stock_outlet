@@ -3,6 +3,7 @@ class Product < ApplicationRecord
   has_many :product_categories, dependent: :destroy
   has_many :categories, through: :product_categories
   has_many :cart_items
+  has_one_attached :image
 
   validates :name, presence: true
   validates :description, presence: true
@@ -13,6 +14,10 @@ class Product < ApplicationRecord
   scope :new_products, -> { where('added_at >= ?', 3.days.ago) }
   scope :recently_updated, -> { where('updated_at >= ? AND added_at < ?', 3.days.ago, 3.days.ago) }
 
+  def image_url
+    Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true) if image.attached?
+  end
+  
   private
 
   def set_added_at
