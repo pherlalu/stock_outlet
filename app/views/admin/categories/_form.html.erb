@@ -1,0 +1,35 @@
+<%= semantic_form_for [:admin, resource] do |f| %>
+  <%= f.inputs 'Category Details' do %>
+    <%= f.input :name, label: "Category Name" %>
+    <%= f.input :description %>
+    <%= f.input :sub_category_id, as: :select, collection: Category.where(sub_category_id: nil).pluck(:name, :id), label: 'Select Parent Category (optional)', include_blank: 'None' %>
+    <%= f.input :new_parent_category_name, label: 'Or create new Parent Category', input_html: { id: 'new_parent_category_name' } %>
+  <% end %>
+
+  <%= f.inputs 'Subcategories' do %>
+    <%= f.has_many :sub_categories, allow_destroy: true, new_record: true do |sub_f| %>
+      <%= sub_f.input :name %>
+      <%= sub_f.input :description %>
+    <% end %>
+  <% end %>
+
+  <%= f.actions %>
+<% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var newParentCategoryField = document.getElementById('new_parent_category_name');
+    var selectParentCategoryField = document.getElementById('category_sub_category_id');
+
+    function toggleNewParentCategoryField() {
+      if (selectParentCategoryField.value) {
+        newParentCategoryField.closest('.input').style.display = 'none';
+      } else {
+        newParentCategoryField.closest('.input').style.display = 'block';
+      }
+    }
+
+    selectParentCategoryField.addEventListener('change', toggleNewParentCategoryField);
+    toggleNewParentCategoryField(); // Initial call to set the correct state
+  });
+</script>
