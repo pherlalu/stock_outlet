@@ -1,5 +1,5 @@
 ActiveAdmin.register Product do
-  permit_params :name, :description, :price, :product_image, :product_link, :product_styleno, :on_sale, :added_at, category_ids: []
+  permit_params :name, :description, :price, :product_image, :uploaded_image, :product_link, :product_styleno, :on_sale, :added_at, category_ids: []
 
   scope :all, default: true
   scope :on_sale
@@ -13,7 +13,11 @@ ActiveAdmin.register Product do
     column :description
     column :price
     column :product_image do |product|
-      image_tag product.product_image, size: "100x100" if product.product_image.present?
+      if product.uploaded_image.attached?
+        image_tag url_for(product.uploaded_image), size: "100x100"
+      elsif product.product_image.present?
+        image_tag product.product_image, size: "100x100"
+      end
     end
     column :on_sale
     column :added_at
@@ -41,7 +45,8 @@ ActiveAdmin.register Product do
       f.input :name
       f.input :description
       f.input :price
-      f.input :product_image
+      f.input :product_image, as: :url
+      f.input :uploaded_image, as: :file
       f.input :product_link
       f.input :product_styleno
       f.input :on_sale
@@ -58,7 +63,11 @@ ActiveAdmin.register Product do
       row :description
       row :price
       row :product_image do |product|
-        image_tag product.product_image if product.product_image.present?
+        if product.uploaded_image.attached?
+          image_tag url_for(product.uploaded_image)
+        elsif product.product_image.present?
+          image_tag product.product_image
+        end
       end
       row :product_link
       row :product_styleno

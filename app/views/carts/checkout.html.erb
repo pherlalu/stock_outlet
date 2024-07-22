@@ -11,8 +11,11 @@
           <% @current_cart.cart_items.each do |item| %>
             <li class="flex py-6 items-center">
               <div class="h-24 w-24 flex-shrink-0 overflow-hidden">
-                <%= image_tag item.product.product_image, alt: item.product.name,
-                  class: "h-auto w-full object-cover object-center" if item.product.product_image.present? %>
+                <% if item.product.uploaded_image.attached? %>
+                  <%= image_tag url_for(item.product.uploaded_image), alt: item.product.name, class: "h-auto w-full object-cover object-center" %>
+                <% elsif item.product.product_image.present? %>
+                  <%= image_tag item.product.product_image, alt: item.product.name, class: "h-auto w-full object-cover object-center" %>
+                <% end %>
               </div>
               <div class="ml-4 flex-1 flex flex-col">
                 <div class="flex justify-between">
@@ -31,7 +34,7 @@
                 </div>
               </div>
             </li>
-            <% end %>
+          <% end %>
         </ul>
       </section>
 

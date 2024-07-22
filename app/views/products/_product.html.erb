@@ -1,6 +1,10 @@
 <div class="flex items-start w-full space-x-4">
   <div class="h-24 w-24 flex-shrink-0 overflow-hidden">
-    <%= image_tag product.product_image, alt: product.name, class: "h-auto w-full object-cover object-center" if product.product_image.present? %>
+    <% if product.uploaded_image.attached? %>
+      <%= image_tag url_for(product.uploaded_image), alt: product.name, class: "h-auto w-full object-cover object-center" %>
+    <% elsif product.product_image.present? %>
+      <%= image_tag product.product_image, alt: product.name, class: "h-auto w-full object-cover object-center" %>
+    <% end %>
   </div>
   <div class="flex-1 flex flex-col justify-between">
     <div>
@@ -13,7 +17,7 @@
     <p class="text-base font-medium text-gray-900"><%= number_to_currency product.price %></p>
   </div>
   <div class="flex flex-col items-end space-y-2">
-   <%= form_with model: cart_item, url: cart_path(cart_item), method: :patch, local: true do |f| %>
+    <%= form_with model: cart_item, url: cart_path(cart_item), method: :patch, local: true do |f| %>
       <label for="quantity" class="text-sm text-gray-600">Quantity:</label>
       <%= f.number_field :quantity, value: cart_item.quantity || 1, min: 1, class: 'w-14 border-gray-200 rounded-md text-center' %>
       <%= f.submit 'Update', class: 'ml-2 bg-indigo-600 text-white px-2 py-1 rounded-md' %>
