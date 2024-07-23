@@ -32,5 +32,24 @@ ActiveAdmin.register Category do
     def find_resource
       scoped_collection.find_by(name: params[:id])
     end
+
+    def destroy
+      category = find_resource
+      category.product_categories.destroy_all # Deleting associated product categories
+
+      if category.destroy
+        flash[:notice] = "Category was successfully deleted."
+      else
+        flash[:error] = "Category could not be deleted."
+      end
+
+      redirect_to admin_categories_path
+    end
+
+    def edit
+      @category = find_resource
+      @category.sub_categories.build if @category.sub_categories.empty?
+      super
+    end
   end
 end
