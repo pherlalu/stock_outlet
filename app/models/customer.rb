@@ -3,7 +3,7 @@ class Customer < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   belongs_to :province
-  has_many :orders
+  has_many :orders, dependent: :destroy
   
   validates :username, presence: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }

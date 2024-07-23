@@ -10,24 +10,29 @@ ActiveAdmin.register_page "Dashboard" do
       end
     end
 
-    # Here is an example of a simple dashboard with columns and panels.
-    #
-    # columns do
-    #   column do
-    #     panel "Recent Posts" do
-    #       ul do
-    #         Post.recent(5).map do |post|
-    #           li link_to(post.title, admin_post_path(post))
-    #         end
-    #       end
-    #     end
-    #   end
+    columns do
+      column do
+        panel "Customer Orders" do
+          ul do
+            li link_to "View Customer Orders", admin_customer_orders_path
+          end
+        end
+      end
 
-    #   column do
-    #     panel "Info" do
-    #       para "Welcome to ActiveAdmin."
-    #     end
-    #   end
-    # end
-  end # content
+      
+    end
+
+    columns do
+      column do
+        panel "Top Customers" do
+          table_for Customer.joins(:orders).select('customers.*, SUM(orders.total) as total_spent').group('customers.id').order('total_spent DESC').limit(10) do
+            column("Customer") { |customer| link_to customer.username, admin_customer_path(customer) }
+            column("Total Spent") { |customer| number_to_currency customer.total_spent }
+          end
+        end
+      end
+
+      
+    end
+  end
 end

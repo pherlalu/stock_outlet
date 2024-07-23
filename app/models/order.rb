@@ -7,10 +7,10 @@ class Order < ApplicationRecord
   # validates :status, presence: true
   # validates :stripe_payment_id, presence: true
   def self.ransackable_associations(auth_object = nil)
-    ["customer", "order_items", "province"] 
+    ["customer", "order_items", "province"]
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "customer_id", "id", "id_value", "stripe_payment_id", "updated_at", "province_id"] 
+    ["created_at", "customer_id", "id", "stripe_payment_id", "updated_at", "province_id", "total"]
   end
 end
