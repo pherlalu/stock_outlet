@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   before_action :set_main_categories
   before_action :set_current_cart
 
+  helper_method :current_cart_path
+
   private
 
   def set_main_categories
@@ -16,10 +18,14 @@ class ApplicationController < ActionController::Base
 
   def set_current_cart
     if session[:current_cart_id]
-      @current_cart = Cart.find_by_secret_id(session[:current_cart_id])
+      @current_cart = Cart.find_by(secret_id: session[:current_cart_id])
     else
       @current_cart = Cart.create
       session[:current_cart_id] = @current_cart.secret_id
     end
+  end
+
+  def current_cart_path
+    cart_path(@current_cart)
   end
 end

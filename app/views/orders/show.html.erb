@@ -1,4 +1,47 @@
-<div>
-  <h1 class="font-bold text-4xl">Orders#show</h1>
-  <p>Find me in app/views/orders/show.html.erb</p>
+<h1 class="text-2xl font-bold mb-4">Order Details</h1>
+
+<div class="border rounded-lg shadow-md p-6 mb-6 bg-white">
+  <div class="flex justify-between items-center border-b pb-4 mb-4">
+    <div>
+      <p class="text-sm text-gray-600">Date placed</p>
+      <p class="font-medium"><%= @order.order_date.strftime('%B %d, %Y') %></p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">Order number</p>
+      <p class="font-medium"><%= @order.id %></p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">Total amount</p>
+      <p class="font-medium"><%= number_to_currency(@order.total) %></p>
+    </div>
+  </div>
+
+  <% if @stripe_payment %>
+    <div class="border-t pt-4 mt-4">
+      <h2 class="text-lg font-bold mb-2">Payment Details</h2>
+      <p class="text-sm text-gray-600">Payment ID: <%= @stripe_payment.id %></p>
+      <p class="text-sm text-gray-600">Amount: <%= number_to_currency(@stripe_payment.amount / 100.0) %></p>
+      <p class="text-sm text-gray-600">Status: <%= @stripe_payment.status %></p>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-5 gap-4 text-sm text-gray-600 font-medium mt-4">
+    <div>Product</div>
+    <div>Price</div>
+    <div>Quantity</div>
+    <div>Subtotal</div>
+  </div>
+  <% @order.order_items.each do |item| %>
+    <div class="grid grid-cols-5 gap-4 items-center py-4 border-b">
+      <div class="flex items-center">
+        <%= image_tag item.product.image_url, alt: item.product.name, class: 'w-16 h-16 object-cover rounded mr-4' %>
+        <div>
+          <p class="font-medium text-gray-800"><%= item.product.name %></p>
+        </div>
+      </div>
+      <div><%= number_to_currency(item.unit_price) %></div>
+      <div><%= item.quantity %></div>
+      <div><%= number_to_currency(item.unit_price * item.quantity) %></div>
+    </div>
+  <% end %>
 </div>

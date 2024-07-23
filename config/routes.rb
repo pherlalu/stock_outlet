@@ -1,19 +1,17 @@
 Rails.application.routes.draw do
   devise_for :customers
-  get 'pages/show'
-  get 'pages/edit'
-  get 'pages/update'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   root "products#index"
 
   resources :customers
   resources :provinces
-  resources :orders
+  resources :orders, only: [:index, :show]
   resources :customer_addresses
   resources :order_items
+  resources :invoices
+
   resources :products, only: [:index, :show] do
     member do
       post 'add_to_cart'
@@ -28,9 +26,6 @@ Rails.application.routes.draw do
     get "success", on: :member, to: "carts#success"
   end
 
-  get 'cart', to: 'carts#show', as: 'current_cart'
-  post 'checkout', to: 'orders#checkout'
-
   resources :categories, path: 'categories', only: [:index, :show], param: :name do
     collection do
       get '', to: 'categories#index', as: 'index'
@@ -40,17 +35,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :invoices
-
   get 'about', to: 'pages#about'
   get '404', to: 'pages#404'
   get 'search', to: 'search#index'
   get 'search/results', to: 'search#results', as: 'search_results'
-
-  # Example routes for contact and about
   get '/pages/:slug', to: 'pages#show', as: 'page'
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 end

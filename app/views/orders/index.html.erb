@@ -1,4 +1,46 @@
-<div>
-  <h1 class="font-bold text-4xl">Orders#index</h1>
-  <p>Find me in app/views/orders/index.html.erb</p>
-</div>
+<h1 class="text-2xl font-bold mb-4">Order history</h1>
+<p class="mb-6">Check the status of recent orders, manage returns, and discover similar products.</p>
+
+<% @orders.each do |order| %>
+  <div class="border rounded-lg shadow-md p-6 mb-6 bg-white">
+    <div class="flex justify-between items-center border-b pb-4 mb-4">
+      <div>
+        <p class="text-sm text-gray-600">Date placed</p>
+        <p class="font-medium"><%= order.order_date.strftime('%B %d, %Y') %></p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Order number</p>
+        <p class="font-medium"><%= order.id %></p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Total amount</p>
+        <p class="font-medium"><%= number_to_currency(order.total) %></p>
+      </div>
+      <div>
+        <%= link_to 'View Details', order_path(order), class: 'text-blue-600 hover:underline' %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-5 gap-4 text-sm text-gray-600 font-medium">
+      <div>Product</div>
+      <div>Price</div>
+      <div>Status</div>
+      <div>Info</div>
+    </div>
+    <% order.order_items.each do |item| %>
+      <div class="grid grid-cols-5 gap-4 items-center py-4 border-b">
+        <div class="flex items-center">
+          <%= image_tag item.product.image_url, alt: item.product.name, class: 'w-16 h-16 object-cover rounded mr-4' %>
+          <div>
+            <p class="font-medium text-gray-800"><%= item.product.name %></p>
+          </div>
+        </div>
+        <div><%= number_to_currency(item.unit_price) %></div>
+        <div><%= "Delivered on #{order.updated_at.strftime('%B %d, %Y')}" %></div>
+        <div>
+          <%= link_to 'View Product', product_path(item.product), class: 'text-blue-600 hover:underline' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
