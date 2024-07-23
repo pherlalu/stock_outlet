@@ -41,7 +41,7 @@ class CartsController < ApplicationController
 
   def stripe_session
     @tax_details = calculate_total_price_with_taxes(@current_cart.cart_items, @province)
-    
+
     session = Stripe::Checkout::Session.create({
       ui_mode: 'embedded',
       line_items: [{
@@ -58,20 +58,66 @@ class CartsController < ApplicationController
         allowed_countries: STRIPE_SUPPORTED_COUNTRIES
       },
       mode: 'payment',
-      return_url: success_cart_url(@current_cart.secret_id),
+      return_url: success_cart_url(@current_cart.secret_id, province_id: @province.id),
     })
-  
+
     render json: { clientSecret: session.client_secret }
   end
-  
 
   def success
-    if @current_cart.cart_items.any?
-      create_order(@current_cart, @current_customer)
-      session[:current_cart_id] = nil
+    @purchased_cart = Cart.find_by(secret_id: params[:id])
+    unless @purchased_cart
+      redirect_to root_path and return
     end
-    @purchased_cart = Cart.find_by_secret_id(params[:id])
-    redirect_to root_path if !@purchased_cart
+  
+    if params[:province_id].present?
+      @province = Province.find(params[:province_id])
+    else
+      redirect_to root_path, alert: 'No province selected' and return
+    end
+  
+    unless @current_customer
+      redirect_to root_path, alert: 'No customer found' and return
+    end
+  
+    ActiveRecord::Base.transaction do
+      order = @current_customer.orders.create!(
+        stripe_payment_id: params[:payment_intent],
+        province_id: @province.id,
+        order_date: Time.current,
+        status: 'paid',
+        total: 0, # Will update later
+        historical_gst_rate: @province.gst_rate,
+        historical_pst_rate: @province.pst_rate,
+        historical_hst_rate: @province.hst_rate,
+        historical_qst_rate: @province.qst_rate
+      )
+  
+      @invoice_items = @purchased_cart.cart_items.map do |cart_item|
+        order_item = order.order_items.create!(
+          product: cart_item.product,
+          quantity: cart_item.quantity,
+          unit_price: cart_item.product.price,
+          subtotal: cart_item.quantity * cart_item.product.price,
+          historical_unit_price: cart_item.product.price,
+          historical_subtotal: cart_item.quantity * cart_item.product.price
+        )
+        order_item
+      end
+  
+      total_order_price = @invoice_items.sum { |item| item.subtotal }
+      order.update!(total: total_order_price)
+    end
+  
+    clear_cart_items
+    @purchased_cart.update!(status: :complete)
+  
+    session[:current_cart_id] = nil if @purchased_cart.cart_items.empty?
+  
+    render :success
+  rescue => e
+    logger.error "Error in success action: #{e.message}"
+    redirect_to root_path, alert: 'There was an issue processing your order.'
   end
 
   private
@@ -79,11 +125,10 @@ class CartsController < ApplicationController
   def set_product
     @product = Product.find(params[:product_id])
   end
-  
+
   def set_province
     @province = Province.find(params[:province_id]) if params[:province_id].present?
   end
-
 
   def set_current_customer
     @current_customer = current_customer
@@ -92,7 +137,7 @@ class CartsController < ApplicationController
 
   def calculate_total_price_with_taxes(cart_items, province)
     tax_details = { subtotal: 0, gst: 0, pst: 0, hst: 0, qst: 0, total: 0 }
-    
+
     cart_items.each do |item|
       item_price = item.product.price || BigDecimal("0")
       quantity = item.quantity || 1
@@ -107,16 +152,12 @@ class CartsController < ApplicationController
       tax_details[:hst] += hst
       tax_details[:qst] += qst
     end
-    
+
     tax_details[:total] = tax_details[:subtotal] + tax_details[:gst] + tax_details[:pst] + tax_details[:hst] + tax_details[:qst]
     tax_details
   end
 
-  def create_order(cart, customer)
-    order = customer.orders.create(status: :complete)
-    cart.cart_items.each do |cart_item|
-      order.order_items.create(product: cart_item.product, quantity: cart_item.quantity)
-    end
-    cart.update(status: :complete)
+  def clear_cart_items
+    @purchased_cart.cart_items.destroy_all
   end
 end

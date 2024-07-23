@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_22_034918) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_23_041033) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -127,6 +127,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_22_034918) do
     t.boolean "is_cart"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "historical_unit_price", precision: 10, scale: 2
+    t.decimal "historical_subtotal", precision: 10, scale: 2
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
   end
@@ -135,9 +137,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_22_034918) do
     t.integer "customer_id", null: false
     t.datetime "order_date"
     t.decimal "total"
-    t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "stripe_payment_id"
+    t.integer "province_id"
+    t.string "status"
+    t.decimal "historical_gst_rate", precision: 5, scale: 3
+    t.decimal "historical_pst_rate", precision: 5, scale: 3
+    t.decimal "historical_hst_rate", precision: 5, scale: 3
+    t.decimal "historical_qst_rate", precision: 5, scale: 3
     t.index ["customer_id"], name: "index_orders_on_customer_id"
   end
 
