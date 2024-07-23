@@ -85,7 +85,12 @@ class CartsController < ApplicationController
         stripe_payment_id: params[:payment_intent],
         province_id: @province.id,
         order_date: Time.current,
-        total: 0 # Will update later
+        status: 'paid',
+        total: 0, # Will update later
+        historical_gst_rate: @province.gst_rate,
+        historical_pst_rate: @province.pst_rate,
+        historical_hst_rate: @province.hst_rate,
+        historical_qst_rate: @province.qst_rate
       )
   
       @invoice_items = @purchased_cart.cart_items.map do |cart_item|
@@ -93,7 +98,9 @@ class CartsController < ApplicationController
           product: cart_item.product,
           quantity: cart_item.quantity,
           unit_price: cart_item.product.price,
-          subtotal: cart_item.quantity * cart_item.product.price
+          subtotal: cart_item.quantity * cart_item.product.price,
+          historical_unit_price: cart_item.product.price,
+          historical_subtotal: cart_item.quantity * cart_item.product.price
         )
         order_item
       end
@@ -112,7 +119,6 @@ class CartsController < ApplicationController
     logger.error "Error in success action: #{e.message}"
     redirect_to root_path, alert: 'There was an issue processing your order.'
   end
-  
 
   private
 

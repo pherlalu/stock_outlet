@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :stripe_webhooks, only: [:create]
+
   get 'about', to: 'pages#about'
   get '404', to: 'pages#404'
   get 'search', to: 'search#index'

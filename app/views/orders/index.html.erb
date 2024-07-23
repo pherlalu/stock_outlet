@@ -1,46 +1,61 @@
-<h1 class="text-2xl font-bold mb-4">Order history</h1>
-<p class="mb-6">Check the status of recent orders, manage returns, and discover similar products.</p>
+<h1 class="text-4xl font-bold mt-10 mb-4 text-center">Order history</h1>
+<p class="mb-6 text-center">Check the status of recent orders, manage returns, and discover similar products.</p>
 
-<% @orders.each do |order| %>
-  <div class="border rounded-lg shadow-md p-6 mb-6 bg-white">
-    <div class="flex justify-between items-center border-b pb-4 mb-4">
-      <div>
-        <p class="text-sm text-gray-600">Date placed</p>
-        <p class="font-medium"><%= order.order_date.strftime('%B %d, %Y') %></p>
+<div class="max-w-4xl mx-auto">
+  <% @orders.each do |order| %>
+    <div class="border rounded-lg shadow-md p-6 mb-6 bg-white">
+      <div class="flex justify-between items-center border-b pb-4 mb-4">
+        <div>
+          <p class="text-sm text-gray-600">Order number</p>
+          <p class="font-medium"><%= order.id %></p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Date placed</p>
+          <p class="font-medium"><%= order.order_date.strftime('%B %d, %Y') %></p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Total amount</p>
+          <p class="font-medium"><%= number_to_currency(order.total) %></p>
+        </div>
+        <div class="flex space-x-2">
+          <%= link_to 'View Order', order_path(order), class: 'bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700' %>
+          <%= link_to 'View Invoice', invoice_path(order), class: 'bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700' %>
+        </div>
       </div>
-      <div>
-        <p class="text-sm text-gray-600">Order number</p>
-        <p class="font-medium"><%= order.id %></p>
-      </div>
-      <div>
-        <p class="text-sm text-gray-600">Total amount</p>
-        <p class="font-medium"><%= number_to_currency(order.total) %></p>
-      </div>
-      <div>
-        <%= link_to 'View Details', order_path(order), class: 'text-blue-600 hover:underline' %>
-      </div>
-    </div>
 
-    <div class="grid grid-cols-5 gap-4 text-sm text-gray-600 font-medium">
-      <div>Product</div>
-      <div>Price</div>
-      <div>Status</div>
-      <div>Info</div>
-    </div>
-    <% order.order_items.each do |item| %>
-      <div class="grid grid-cols-5 gap-4 items-center py-4 border-b">
-        <div class="flex items-center">
-          <%= image_tag item.product.image_url, alt: item.product.name, class: 'w-16 h-16 object-cover rounded mr-4' %>
-          <div>
+      <% order.order_items.each do |item| %>
+        <div class="flex items-start py-4">
+          <div class="w-1/5">
+            <%= image_tag item.product.image_url, alt: item.product.name, class: 'w-auto h-16 object-cover rounded' %>
+          </div>
+          <div class="w-3/5">
             <p class="font-medium text-gray-800"><%= item.product.name %></p>
+            <p class="text-sm text-gray-600">Quantity: <%= item.quantity %></p>
+            <div class="flex mt-2 space-x-4">
+              <%= link_to 'View Product', product_path(item.product), class: 'text-blue-600 hover:underline' %>
+            </div>
+          </div>
+          <div class="w-1/5 text-right">
+            <p class="font-medium text-gray-800"><%= number_to_currency(item.unit_price) %></p>
           </div>
         </div>
-        <div><%= number_to_currency(item.unit_price) %></div>
-        <div><%= "Delivered on #{order.updated_at.strftime('%B %d, %Y')}" %></div>
-        <div>
-          <%= link_to 'View Product', product_path(item.product), class: 'text-blue-600 hover:underline' %>
+        <div class="flex items-center text-sm text-gray-600 mt-2">
+          <% if order.status == 'paid' %>
+            <p class="flex items-center">
+              <span class="inline-block w-4 h-4 bg-yellow-400 rounded-full mr-2"></span> Out for delivery
+            </p>
+          <% elsif order.status == 'shipped' %>
+            <p class="flex items-center">
+              <span class="inline-block w-4 h-4 bg-green-500 rounded-full mr-2"></span> Delivered on <%= order.updated_at.strftime('%B %d, %Y') %>
+            </p>
+          <% elsif order.status == 'canceled' %>
+            <p class="flex items-center">
+              <span class="inline-block w-4 h-4 bg-gray-500 rounded-full mr-2"></span> Canceled
+            </p>
+          <% end %>
         </div>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+        <hr class="my-4">
+      <% end %>
+    </div>
+  <% end %>
+</div>
